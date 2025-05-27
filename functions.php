@@ -296,9 +296,12 @@ class PlaceholderBlock
 // Registering new blocks
 function custom_new_blocks()
 {
+    wp_localize_script("wp-editor", "customthemedata", array('themePath' => get_stylesheet_directory_uri()));
+
     register_block_type_from_metadata(__DIR__ . '/build/footer');
     register_block_type_from_metadata(__DIR__ . '/build/header');
     register_block_type_from_metadata(__DIR__ . '/build/eventsandblogs');
+    register_block_type_from_metadata(__DIR__ . '/build/banner');
 }
 
 add_action('init', 'custom_new_blocks');
@@ -316,7 +319,7 @@ new PlaceholderBlock('singleprogram');
 new PlaceholderBlock('singleprofessor');
 new PlaceholderBlock('mynotes');
 
-new JSXBlock('banner', true, ['fallbackimage' => get_theme_file_uri('/images/library-hero.jpg')]);
+// new JSXBlock('banner', true, ['fallbackimage' => get_theme_file_uri('/images/library-hero.jpg')]);
 new JSXBlock('genericheading');
 new JSXBlock('genericbutton');
 new JSXBlock('slideshow', true);
