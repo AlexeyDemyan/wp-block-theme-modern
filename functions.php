@@ -293,9 +293,18 @@ class PlaceholderBlock
     }
 }
 
+// Registering new blocks
+function custom_new_blocks()
+{
+    register_block_type_from_metadata(__DIR__ . '/build/footer');
+}
+
+add_action('init', 'custom_new_blocks');
+
+// ---
+
 new PlaceholderBlock('eventsandblogs');
 new PlaceholderBlock('header');
-new PlaceholderBlock('footer');
 new PlaceholderBlock('singlepost');
 new PlaceholderBlock('page');
 new PlaceholderBlock('blogindex');
