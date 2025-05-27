@@ -297,14 +297,17 @@ class PlaceholderBlock
 function custom_new_blocks()
 {
     register_block_type_from_metadata(__DIR__ . '/build/footer');
+    register_block_type_from_metadata(__DIR__ . '/build/header');
+    register_block_type_from_metadata(__DIR__ . '/build/eventsandblogs');
 }
 
 add_action('init', 'custom_new_blocks');
 
 // ---
 
-new PlaceholderBlock('eventsandblogs');
-new PlaceholderBlock('header');
+// new PlaceholderBlock('eventsandblogs');
+// new PlaceholderBlock('header');
+// new PlaceholderBlock('footer');
 new PlaceholderBlock('singlepost');
 new PlaceholderBlock('page');
 new PlaceholderBlock('blogindex');
