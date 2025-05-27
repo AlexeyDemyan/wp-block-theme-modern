@@ -5,31 +5,22 @@ import {
   InspectorControls,
   MediaUpload,
   MediaUploadCheck,
+  useBlockProps,
 } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 
-wp.blocks.registerBlockType('customblocktheme/slide', {
-  title: 'Custom Slide',
-  supports: {
-    align: ['full'],
-  },
-  attributes: {
-    align: { type: 'string', default: 'full' },
-    imgID: { type: 'number' },
-    // specifygin "window." is not necesary, just "banner.fallbackimage" should be enough
-    imgURL: { type: 'string', default: window.banner.fallbackimage },
-    themeimage: { type: 'string' },
-  },
-  edit: editComponent,
-  save: saveComponent,
-});
+export default function Edit(props) {
+  const blockProps = useBlockProps();
 
-function editComponent(props) {
-  // empty array to only run this effect on initial load
   useEffect(() => {
     if (props.attributes.themeimage) {
       props.setAttributes({
-        imgURL: `${slide.themeimagepath}${props.attributes.themeimage}`,
+        imgURL: `${customthemedata.themePath}/images/${props.attributes.themeimage}`,
+      });
+    }
+    if (!props.attributes.themeimage && !props.attributes.imgURL) {
+      props.setAttributes({
+        imgURL: `${customthemedata.themePath}/images/library-hero.jpg`,
       });
     }
   }, []);
@@ -73,29 +64,27 @@ function editComponent(props) {
           </PanelRow>
         </PanelBody>
       </InspectorControls>
-      <div
-        className='hero-slider__slide'
-        style={{
-          backgroundImage: `url('${props.attributes.imgURL}')`,
-        }}
-      >
-        <div class='hero-slider__interior container'>
-          <div class='hero-slider__overlay t-center'>
-            <InnerBlocks
-              allowedBlocks={[
-                'customblocktheme/genericheading',
-                'customblocktheme/genericbutton',
-                'core/paragraph',
-                'core/list',
-              ]}
-            />
+      <div {...blockProps}>
+        <div
+          className='hero-slider__slide'
+          style={{
+            backgroundImage: `url('${props.attributes.imgURL}')`,
+          }}
+        >
+          <div class='hero-slider__interior container'>
+            <div class='hero-slider__overlay t-center'>
+              <InnerBlocks
+                allowedBlocks={[
+                  'customblocktheme/genericheading',
+                  'customblocktheme/genericbutton',
+                  'core/paragraph',
+                  'core/list',
+                ]}
+              />
+            </div>
           </div>
         </div>
       </div>
     </>
   );
-}
-
-function saveComponent() {
-  return <InnerBlocks.Content />;
 }

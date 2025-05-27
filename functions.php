@@ -302,6 +302,7 @@ function custom_new_blocks()
     register_block_type_from_metadata(__DIR__ . '/build/header');
     register_block_type_from_metadata(__DIR__ . '/build/eventsandblogs');
     register_block_type_from_metadata(__DIR__ . '/build/banner');
+    register_block_type_from_metadata(__DIR__ . '/build/slide');
 }
 
 add_action('init', 'custom_new_blocks');
@@ -323,7 +324,7 @@ new PlaceholderBlock('mynotes');
 new JSXBlock('genericheading');
 new JSXBlock('genericbutton');
 new JSXBlock('slideshow', true);
-new JSXBlock('slide', true, ['themeimagepath' => get_theme_file_uri('/images/')]);
+// new JSXBlock('slide', true, ['themeimagepath' => get_theme_file_uri('/images/')]);
 
 
 function myallowedblocks($allowed_block_types, $editor_context)
@@ -338,7 +339,9 @@ function myallowedblocks($allowed_block_types, $editor_context)
         return $allowed_block_types;
     }
     // if user is on full site editor screen, trying to edit a template, they can only add footer or header
-    return array('customblocktheme/header', 'customblocktheme/footer');
+    // return array('customblocktheme/header', 'customblocktheme/footer');
+    // Will allow to add any blocks for now, ghax easier to try things this way
+    return $allowed_block_types;
 };
 
 add_filter('allowed_block_types_all', 'myallowedblocks', 10, 2);
