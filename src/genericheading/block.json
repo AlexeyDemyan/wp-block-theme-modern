@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "customblocktheme/genericheading",
+  "title": "Custom Generic Heading",
+  "editorScript": "file:./index.js",
+  "attributes": {
+    "text": { "type": "string" },
+    "size": { "type": "string", "default": "large" }
+  }
+}
