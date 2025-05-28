@@ -14,29 +14,14 @@ import {
   BlockControls,
   __experimentalLinkControl as LinkControl,
   getColorObjectByColorValue,
+  useBlockProps,
 } from '@wordpress/block-editor';
-import { registerBlockType } from '@wordpress/blocks';
 import { useState } from '@wordpress/element';
-import customColors from "../includes/customColors.js"
+import customColors from '../../includes/customColors';
 
-registerBlockType('customblocktheme/genericbutton', {
-  title: 'Generic Button',
-  attributes: {
-    text: { type: 'string' },
-    size: { type: 'string', default: 'large' },
-    linkObject: {
-      type: 'object',
-      default: {
-        url: '',
-      },
-    },
-    colorName: { type: 'string', default: 'blue' },
-  },
-  edit: editComponent,
-  save: saveComponent,
-});
+export default function Edit(props) {
+  const blockProps = useBlockProps();
 
-function editComponent(props) {
   const [isLinkPickerVisible, setIsLinkPickerVisible] = useState(false);
 
   function handleTextChange(value) {
@@ -62,7 +47,7 @@ function editComponent(props) {
   }
 
   return (
-    <>
+    <div {...blockProps}>
       <BlockControls>
         <ToolbarGroup>
           <ToolbarButton onClick={buttonHandler} icon={link} />
@@ -116,7 +101,12 @@ function editComponent(props) {
         onChange={handleTextChange}
       />
       {isLinkPickerVisible && (
-        <Popover position='middle center' onFocusOutside={() => {setIsLinkPickerVisible(false)}}>
+        <Popover
+          position='middle center'
+          onFocusOutside={() => {
+            setIsLinkPickerVisible(false);
+          }}
+        >
           <LinkControl
             settings={[]}
             value={props.attributes.linkObject}
@@ -133,17 +123,6 @@ function editComponent(props) {
           </Button>
         </Popover>
       )}
-    </>
-  );
-}
-
-function saveComponent(props) {
-  return (
-    <a
-      href={props.attributes.linkObject.url}
-      className={`btn btn--${props.attributes.size} btn--${props.attributes.colorName}`}
-    >
-      {props.attributes.text}
-    </a>
+    </div>
   );
 }

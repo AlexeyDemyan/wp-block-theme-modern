@@ -223,46 +223,6 @@ function makeNotePrivate($data, $postarr)
 // But here we still need to specify because we need to access the 4th argument
 add_filter('wp_insert_post_data', 'makeNotePrivate', 1, 2);
 
-class JSXBlock
-{
-    function __construct($name, $renderCallback = null, $data = null)
-    {
-        $this->name = $name;
-        $this->data = $data;
-        $this->renderCallback = $renderCallback;
-        add_action('init', [$this, 'onInit']);
-    }
-
-    // when calling render_callback later, WP will pass arttributes and also nested content
-    // and we received those as parameters here:
-    function customRenderCallback($attributes, $content)
-    {
-        ob_start();
-        require get_theme_file_path("/custom-blocks/{$this->name}.php");
-        return ob_get_clean();
-    }
-
-    function onInit()
-    {
-        wp_register_script($this->name, get_stylesheet_directory_uri() . "/build/{$this->name}.js", array('wp-blocks', 'wp-editor'));
-
-        if ($this->data) {
-            wp_localize_script($this->name, $this->name, $this->data);
-        }
-
-        $customArgs = array(
-            'editor_script' => $this->name
-        );
-
-        if ($this->renderCallback) {
-            // render_callback is a reserved name
-            $customArgs['render_callback'] = [$this, 'customRenderCallback'];
-        }
-
-        register_block_type("customblocktheme/{$this->name}", $customArgs);
-    }
-}
-
 class PlaceholderBlock
 {
     function __construct($name,)
@@ -305,6 +265,7 @@ function custom_new_blocks()
     register_block_type_from_metadata(__DIR__ . '/build/slide');
     register_block_type_from_metadata(__DIR__ . '/build/slideshow');
     register_block_type_from_metadata(__DIR__ . '/build/genericheading');
+    register_block_type_from_metadata(__DIR__ . '/build/genericbutton');
 }
 
 add_action('init', 'custom_new_blocks');
@@ -321,12 +282,6 @@ new PlaceholderBlock('programarchive');
 new PlaceholderBlock('singleprogram');
 new PlaceholderBlock('singleprofessor');
 new PlaceholderBlock('mynotes');
-
-// new JSXBlock('banner', true, ['fallbackimage' => get_theme_file_uri('/images/library-hero.jpg')]);
-// new JSXBlock('genericheading');
-new JSXBlock('genericbutton');
-// new JSXBlock('slideshow', true);
-// new JSXBlock('slide', true, ['themeimagepath' => get_theme_file_uri('/images/')]);
 
 
 function myallowedblocks($allowed_block_types, $editor_context)
